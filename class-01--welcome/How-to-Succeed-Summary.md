@@ -12,7 +12,3 @@
 * Work through exercises
 
 * Pseudocode first, code last
-
-<figure class="video_container">
-    <iframe src="https://calendar.google.com/calendar/embed?src=t9dblmtosngla9atktqf766hugrue4pt%40import.calendar.google.com&ctz=America%2FSao_Paulo" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-</figure>
