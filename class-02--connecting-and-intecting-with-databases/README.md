@@ -245,3 +245,183 @@ TCP/IP uses:
 ### Additional Resources
 * List of [well-known TCP IP Ports](http://www.meridianoutpost.com/resources/articles/well-known-tcpip-ports.php)
 * For those who are interested in gaining in-depth knowledge on computer networking, check out the (free!) [Udacity Course on Computer Networking offered by Georgia Tech](https://www.udacity.com/course/computer-networking--ud436).
+
+## Connections and Sessions in TCP/IP
+
+### Takeaways
+* TCP/IP is connection-based, meaning all communications between parties are arranged over a connection. A connection is established before any data transmission begins.
+* Over TCP/IP, we'll always need to establish a connection between clients and servers in order to enable communications. Moreover:
+Deliveries over the connection are error-checked: if packets arrive damaged or lost, then they are resent (known as retransmission).
+* Connecting starts a session. Ending the connection ends the session.
+* In a database session, many transactions can occur during a given session. Each transaction does work to commit changes to the database (updating, inserting, or deleting records).
+
+### Aside: the UDP Protocol
+The internet also offers the UDP protocol. UDP is much simpler than TCP: hosts on the network send data (in units called datagrams) without any connections needing to be established.
+
+### TCP vs UDP
+If TCP is like building highways between houses before sending packages between them, then UDP is much like sending over a carrier pigeon from one house to another in order to deliver packages: you don't know whether the pigeon will head in the right way, drop your package along the way, or encounter an issue mid-travel. On the other hand, there is less overhead to use UDP than managing a connection over TCP / building a highway.
+
+When speed is more important than reliability, especially when applications need to stream very small amounts of information quickly (smaller packages of information means less issues with reliability), then UDP is preferred. A lot of real time streaming applications, (e.g. live TV streaming, Voice over IP (VoIP)) prefer UDP over TCP. Since UDP does not need to retransmit lost datagrams, nor does it do any connection setup, there are fewer delays over UDP than TCP. TCP's continuous connection is more reliable but has more latency.
+
+>#### QUESTION 1 OF 2
+>A ____________ must be established to enable data transmission across a network using TCP/IP.
+>
+>[ ] session
+>
+>[x] connection
+>
+>[ ] transaction
+
+>#### QUESTION 2 OF 2
+>Within a session, we encapsulate units of work that we commit as changes to a database in what we call ________.
+>
+> transaction
+
+## Transactions
+
+### Takeaways
+* Databases are interacted using client-server interactions, over a network
+* Postgres uses TCP/IP to be interacted with, which is connection-based
+* We interact with databases like Postgres during sessions
+* Sessions have transactions that commit work to the database
+
+**Transactions capture logical bundles of work.**
+
+Work is bundled into transactions, so that in case of system failures, data in your database is still kept in a valid state (by rolling back the entire transaction if any part of it fails). To ensure a database is consistent before and after work is done to it, databases uses atomic transactions, and actions like commits and rollbacks to handle failures appropriately. Transactions are, in other words, ACID.
+
+#### Resource on ACID Properties
+See: [ACID Properties in DBMS](https://www.geeksforgeeks.org/acid-properties-in-dbms/) on GeeksforGeeks.org
+
+>#### QUESTION 1 OF 5
+>Transactions are:
+>
+>[ ] channels that enable data transmission across a TCP/IP network
+>
+>[x] atomic units of work for the database to perform as a whole
+>
+>[ ] packets of information exchanged over a network
+
+>#### QUESTION 2 OF 5
+>True/False: a transaction captures a single change done to a database
+>
+>[ ] True
+>
+>[x] False
+
+>#### QUESTION 3 OF 5
+>Which SQL statements can be added to a transaction?
+>
+>[ ] SELECT
+>
+>[ ] ALTER TABLE
+>
+>[x] UPDATE
+>
+>[ ] GROUP BY
+>
+>[x] INSERT
+>
+>[x] DELETE
+
+>#### QUESTION 4 OF 5
+>You can send off the set of changes to the database by ____ the transaction
+>
+>[ ] adding to
+>
+>[x] commiting
+
+>#### QUESTION 5 OF 5
+>A transaction can be cleared of commands using a ______.
+>
+>[ ] session
+>
+>[ ] commit
+>
+>[ ] UPDATE, INSERT or DELETE statement
+>
+>[x] rollback
+
+
+## Installing Postgres
+
+You should know that you successfully installed Postgres if you can run the following in your terminal, and see a path outputted:
+
+```bash
+$ which postgres
+/usr/local/bin/postgres
+```
+
+See [How to start, stop, and restart a postgresql server](https://tableplus.io/blog/2018/10/how-to-start-stop-restart-postgresql-server.html) to follow steps for your particular operating system.
+
+## Initial installation settings
+The initial installation will:
+
+* create an initial database named postgres
+* create an initial user named postgres. Your postgres user will have no password set by default.
+* create initial databases called template1 and template0. Any other database created after template1 is a clone of template1, including its tables and rows. If you add rows (objects) to template1, they will be copied onto future created databases. template0, on the other hand, should stay "pure" and never be changed.
+* The default host machine that runs your postgres server, on your machine, is localhost (aka, 127.0.0.1)
+* The default port traditionally used to host your server is port 5432. There are very few reasons to use a different port than 5432.
+
+## Intro to psql
+
+### Takeaways
+* psql is an interactive terminal application for connecting and interacting with your local postgres server on your machine.
+* Connect using `$ psql <dbname>`
+* psql lets you
+    * Directly type and execute SQL commands to your database
+    * Inspect and preview your database and database tables using psql meta-commands
+
+
+### psql commands
+```bash
+psql <dbname> [<username>]
+```
+
+Starts psql with a connection to dbname. Optionally use another user than current user
+
+In psql:
+```bash
+# \l
+```
+
+List all databases on the server, their owners, and user access levels
+```bash
+# \c <dbname>
+```
+
+Connect to a database named
+```bash
+# \dt
+```
+
+Show database tables
+```bash
+# \d <tablename>
+```
+
+Describe table schema
+```bash
+# \q
+```
+
+Quit psql, return to the terminal
+
+### Using psql - final remarks
+
+>#### start psql connection
+>What is the command to start a psql connection to a database named `mydb` and with a username `jane`? Write it out.
+>
+>psql mydb jane
+
+### Cheat Sheet
+[Click here to access a Cheat Sheet with postgres and psql commands](https://video.udacity-data.com/topher/2019/August/5d5a1055_postgres-psql-cheat-sheet/postgres-psql-cheat-sheet.pdf)
+
+### Other Postgres Clients
+
+**So, do you need to use psql to do web development?**
+No. Other popular client alternatives for inspecting and interacting with your postgres server are:
+
+* pgAdmin, available for every operating system
+* PopSQL available for MacOS
+
+The course videos will heavily rely on using psql.
