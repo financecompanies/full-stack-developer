@@ -221,3 +221,90 @@ pip install psycopg2-binary
 * Install troubleshooting threads:
     * For error Failed building wheel for psycopg2: https://stackoverflow.com/questions/34304833/failed-building-wheel-for-psycopg2-macosx-using-virtualenv-and-pip
     * For error pg_config executable not found: https://stackoverflow.com/questions/11618898/pg-config-executable-not-found
+
+## Learnt lesson: Create specific postgres user
+
+To run Postgres commands in order to create tables (DDL) and also to insert rows (DML) we need to create a specific user and provide that user into connection string to `psycopg2.connect()` method.
+
+Connect as postgres user:
+
+```bash
+sudo -u postgres -i
+```
+
+Or connect direct to psql using postgres user:
+
+```bash
+sudo -u postgres psql
+```
+
+Create the database:
+
+```bash
+createdb android
+```
+
+Create the user using interactive mode:
+
+```bash
+sudo -u postgres createuser --interactive
+```
+
+Or with a more flexible way:
+
+```bash
+create user androiduser with encrypted password 'androidpwd';
+```
+
+Grant permissions to the new created user:
+
+```bash
+grant all privileges on database mydb to myuser;
+```
+
+## Learnt lesson: Configure virtualenv with Pyenv-virtualenv
+
+Easily install pyenv:
+
+```bash
+curl https://pyenv.run | bash
+```
+
+Add these lines at the bottoom of `~/.bashrc` or `~/.bash_profile`
+
+```bash
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+```
+
+First install the desired python version:
+
+```bash
+pyenv install --list
+pyenv install -v 3.7.4
+```
+
+Check current versions installed:
+
+```bash
+pyenv versions
+```
+
+Create the virtualenv and activate it to setup it up:
+
+```bash
+pyenv virtualenv 3.7.4 fyyur
+pyenv activate fyyur
+```
+
+Install the requirements:
+
+```bash
+pip install -r requirements.txt
+```
+
+### References
+* [Utilizando Pyenv e Pyenv-virtualenv e aposentando o virtualenv “ou não”](http://www.mateuspaduaweb.com.br/utilizando-pyenv-e-pyenv-virtualenv-e-aposentando-o-virtualenv-ou-nao/)
+* [Gerenciamento de Ambientes Python com pyenv
+](https://medium.com/operacionalti/gerenciamento-de-ambientes-python-com-pyenv-3ce71eb1a2c3)
