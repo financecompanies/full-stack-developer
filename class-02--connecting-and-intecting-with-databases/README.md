@@ -425,3 +425,48 @@ No. Other popular client alternatives for inspecting and interacting with your p
 * PopSQL available for MacOS
 
 The course videos will heavily rely on using psql.
+
+## More on psycopg2
+
+### Takeaways
+
+We can use string interpolation to compose a SQL query using python strings. Two methods for doing so include:
+* Using %s, passing in a tuple as the 2nd argument in cursor.execute()
+* Using named string parameters %(foo)s, passing in a dictionary instead.
+
+### Additional Resources
+* [psycopg2 docs: Basic module usage](http://initd.org/psycopg/docs/usage.html)
+
+### Demo
+
+```python
+import psycopg2
+
+connection = psycopg2.connect('dbname=example')
+
+cursor = connection.cursor()
+
+cursor.execute('DROP TABLE IF EXISTS table2;')
+
+cursor.execute('''
+  CREATE TABLE table2 (
+    id INTEGER PRIMARY KEY,
+    completed BOOLEAN NOT NULL DEFAULT False
+  );
+''')
+
+cursor.execute('INSERT INTO table2 (id, completed) VALUES (%s, %s);', (1, True))
+
+SQL = 'INSERT INTO table2 (id, completed) VALUES (%(id)s, %(completed)s);'
+
+data = {
+  'id': 2,
+  'completed': False
+}
+cursor.execute(SQL, data)
+
+connection.commit()
+
+connection.close()
+cursor.close()
+```
