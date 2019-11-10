@@ -170,3 +170,58 @@ db = SQLAlchemy(app)
 
 * By default, SQLAlchemy will pick the name of the table for you, setting it equal to the lower-case version of your class's name. Otherwise, we set the name of the table using `__tablename__ = 'my_custom_table_name'`.
 
+## SQLAlchemy commands
+
+```python
+Person.query.first()
+```
+
+```python
+Person.query.all()
+```
+
+```python
+Person.query.filter(Person.name == 'Filipe Bezerra').first()
+```
+
+## SQLAlchemy Data Types
+
+### Resources
+* [Flask-SQLAlchemy: Declaring Models](https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/)
+* [Getting Started with PostgreSQL Data Types](http://www.postgresqltutorial.com/postgresql-data-types/)
+
+![SQLAlchemy data types. Source: https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/](https://video.udacity-data.com/topher/2019/August/5d5a43a0_screen-shot-2019-08-18-at-11.36.57-pm/screen-shot-2019-08-18-at-11.36.57-pm.png)
+
+Flask-SQLAlchemy data types generally map to SQLAlchemy's library of data types.
+
+Check out the SQLAlchemy docs on [Column and Data Types](https://docs.sqlalchemy.org/en/latest/core/types.html) to learn more.
+
+## SQLAlchemy Constraints
+
+### Takeaways
+* In SQLAlchemy, constraints are set in `db.Column()` after setting the data type.
+  * `nullable`=False is equivalent to `NOT NULL` in SQL
+  * `unique=True` is equivalent to `UNIQUE` in SQL
+
+### Example
+
+```python
+class User(db.Model):
+  ...
+  name = db.Column(db.String(), nullable=False, unique=True)
+```
+
+### Implementing a check constraint
+
+```python
+class Product(db.Model):
+  ...
+  price = db.Column(db.Float, db.CheckConstraint('price>0'))
+  ```
+
+  ### Resources
+* [SQLAlchemy Constraints Docs](https://docs.sqlalchemy.org/en/latest/core/constraints.html). Constraints available in SQLAlchemy are (generally) available in Flask-SQLAlchemy, and exposed by `db.<sqlalchemy_method_or_interface>`.
+
+### Handy Resources on SQLAlchemy
+* Bookmark this: [SQLAlchemy Cheat Sheet](https://github.com/crazyguitar/pysheeet/blob/master/docs/notes/python-sqlalchemy.rst#set-a-database-url)
+* [Using PostgreSQL through SQLAlchemy](https://www.compose.com/articles/using-postgresql-through-sqlalchemy/)
