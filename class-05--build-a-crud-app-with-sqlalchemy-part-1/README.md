@@ -151,3 +151,119 @@ psql todoapp
 * request.data retrieves JSON as a string. Then we'd take that string and turn it into python constructs by calling json.loads on the request.data string to turn it into lists and dictionaries in Python.
 
 <img src="https://video.udacity-data.com/topher/2019/August/5d5dcb03_screen-shot-2019-08-21-at-3.51.37-pm/screen-shot-2019-08-21-at-3.51.37-pm.png" alt="" width="534px">
+
+## Using AJAX to send data to flask
+
+### Takeaways
+* Data request are either synchronous or async (asynchronous)
+* Async data requests are requests that get sent to the server and back to the client without a page refresh.
+* Async requests (AJAX requests) use one of two methods:
+  * XMLHttpRequest
+  * Fetch (modern way)
+
+### Using `XMLHttpRequest`
+
+#### Code
+
+```javascript
+var xhttp = new XMLHttpRequest();
+
+description = document.getElementById("description").value;
+
+xhttp.open("GET", "/todos/create?description=" + description);
+
+xhttp.send();
+```
+
+```javascript
+xhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      // on successful response
+      console.log(xhttp.responseText);
+    }
+};
+```
+
+### Using `fetch`
+
+#### Takeaways
+* `fetch` is another window object that lets you send HTTP requests
+* `fetch(<url-route>, <object of request parameters>)`
+
+#### Code
+
+```javascript
+fetch('/my/request', {
+  method: 'POST',
+  body: JSON.stringify({
+    'description': 'some description here'
+  }),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+## Using sessions in controllers
+
+### Takeaways
+* Commits can succeed or fail. On fail, we want to rollback the session to avoid potential implicit commits done by the database on closing a connection.
+* Good practice is to close connections at the end of every session used in a controller, to return the connection back to the connection pool.
+
+### Pattern (try-except-finally)
+
+ ```python
+ import sys
+
+ try:
+   todo = Todo(description=description)
+   db.session.add(todo)
+   db.session.commit()
+ except:
+   db.session.rollback()
+   error=True
+   print(sys.exc_info())
+ finally:
+   db.session.close()
+```
+
+### Improving error handling
+
+The route handler should always return something or raise an intentional exception, in the case of an error. To fix this with a simple solution, we can simply import abort from Flask:
+
+`from flask import abort`
+
+and we can call `abort(<status code>)`, e.g. with status code 500, `abort(500)` to rise an HTTPException for an Internal Server Error, in order to abort a request and prevent it from expecting a returned result. Since this is a course on web data modeling, we won't be going into errors in depth, but you can check out resources below.
+
+#### Resources on Error Handling
+* [Flask Docs on Application Errors](https://flask.palletsprojects.com/en/1.0.x/errorhandling/)
+* [Error Handling in Flask Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-vii-error-handling)
+
+#### Code
+
+```python
+from flask import Flask, render_template, abort
+
+# ...
+
+@app.route('/todos/create', method=['POST'])
+def create_todo():
+  error = False
+  body = {}
+  try:
+    description = request.form.get_json()['description']
+    todo = Todo(description=description)
+    db.session.add(todo)
+    db.session.commit()
+    body['description'] = todo.description
+  except:
+    error = True
+    db.session.rollback()
+    print(sys.exc_info())
+  finally:
+    db.session.close()
+  if error:
+    abort (400)
+  else:
+    return jsonify(body
+```
