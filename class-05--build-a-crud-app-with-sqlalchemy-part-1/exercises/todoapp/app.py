@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -32,6 +32,18 @@ def create():
         return jsonify({
             'description': new_todo.description
         })
+    else:
+        abort(make_error('Description is required', 400))
+
+
+def make_error(message, code):
+    json_error = jsonify({
+        'code': code,
+        'message': message
+    })
+    json_error.status_code = code
+    return json_error
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
