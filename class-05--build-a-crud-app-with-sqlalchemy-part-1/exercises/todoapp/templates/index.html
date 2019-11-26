@@ -23,6 +23,7 @@
             <input type="text" id="description" name="description" maxlength="300">
             <input type="submit" value="Create">
         </form>
+        <div id="validation" class="hidden error"></div>
         <div id="error" class="hidden error">Something went wrong!</div>
         <ul id="todos">
             {% for d in data %}
@@ -45,11 +46,16 @@
             })
             .then(function(jsonResponse) {
                 console.log(jsonResponse);
-                liItem = document.createElement('LI');
-                liItem.innerHTML = jsonResponse['description'];
-                document.getElementById('todos').appendChild(liItem);
-                document.getElementById('error').className = 'hidden error';
-
+                if (jsonResponse.code) {
+                    document.getElementById('validation').className = 'error';
+                    document.getElementById('validation').innerHTML = jsonResponse.message;
+                } else {
+                    liItem = document.createElement('LI');
+                    liItem.innerHTML = jsonResponse['description'];
+                    document.getElementById('todos').appendChild(liItem);
+                    document.getElementById('error').className = 'hidden error';
+                    document.getElementById('validation').className = 'hidden error';
+                }
             })
             .catch(function(error) {
                 console.log(error);

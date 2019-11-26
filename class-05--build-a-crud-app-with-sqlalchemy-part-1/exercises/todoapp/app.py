@@ -42,7 +42,7 @@ def create():
             db.session.close()
 
         if error:
-            abort(make_error('Sorry, we can\'t process your request', 400))
+            abort(make_error('Sorry, we can\'t process your request', 500))
         else:
             return jsonify(response)
     else:
