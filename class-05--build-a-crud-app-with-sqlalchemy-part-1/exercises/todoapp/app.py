@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://todoapp:todoapp@localhost:5432/todoapp'
@@ -26,12 +27,24 @@ def index():
 def create():
     description = request.get_json().get('description')
     if description:
-        new_todo = Todo(description=description)
-        db.session.add(new_todo)
-        db.session.commit()
-        return jsonify({
-            'description': new_todo.description
-        })
+        error = False
+        response = {}
+        try:
+            new_todo = Todo(description=description)
+            db.session.add(new_todo)
+            db.session.commit()
+            response['description'] = new_todo.description
+        except:
+            db.session.rollback()
+            error = True
+            print(sys.exc_info)
+        finally:
+            db.session.close()
+
+        if error:
+            abort(make_error('Sorry, we can\'t process your request', 400))
+        else:
+            return jsonify(response)
     else:
         abort(make_error('Description is required', 400))
 
