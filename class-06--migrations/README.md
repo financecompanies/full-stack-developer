@@ -68,3 +68,55 @@ This is much better, because
 * We can keep existing schema structures, only modifying what needs to be modified
 * We can keep existing data
 * We isolate units of change in migration scripts that we can roll back to a “safe” db state
+
+## Flask_Migrate - Part 2
+
+### Creating the migrations directory structure using `flask db init`
+
+### Syncing models using `flask db migrate`
+
+### To restart your postgres server
+In case of an error with existing sessions or connections, you can stop your postgres server to close out existing connections, and then start it up again. Note that stopping a server does not affect the data inside it; they still persist.
+
+To do so:
+
+**On MacOS if you installed postgres using Homebrew,**
+```bash
+$ brew services start postgresql
+$ brew services stop postgresql
+```
+
+**Otherwise**
+You can call start and stop manually on your postgres server using [pg_ctl](https://www.postgresql.org/docs/10/app-pg-ctl.html), Postgres's application for starting, stopping, and controlling a Postgres server, included with every Postgres install:
+
+To stop it, closing open connections, call
+
+```bash
+$ pg_ctl -D /usr/local/var/postgres stop
+```
+
+and to start it up again, call
+
+```bash
+$ pg_ctl -D /usr/local/var/postgres start
+```
+
+## Flask-Migrate - Part 3
+
+`flask db upgrade` and `flask db downgrade`
+
+## Flask-Migrate - Part 4
+
+### Takeaways
+**Overall Steps to Set Up & Run Migrations**
+1. **Bootstrap database migrate commands**: link to the Flask app models and database, link to command line scripts for running migrations, set up folders to store migrations (as versions of the database)
+2. **Run initial migration to create tables for SQLAlchemy models**, recording the initial schema: ala git init && first git commit. Replaces use of db.create_all()
+3. **Migrate on changes to our data models**
+    * Make changes to the SQLAlchemy models
+    * Allow Flask-Migrate to auto-generate a migration script based on the changes
+    * Fine-tune the migration scripts
+    * Run the migration, aka “upgrade” the database schema by a “version”
+
+**It’s always helpful to read the docs!**
+* https://alembic.sqlalchemy.org/en/latest/
+* https://flask-migrate.readthedocs.io/en/latest/
