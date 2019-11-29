@@ -65,6 +65,18 @@ def set_completed(todo_id):
     return redirect(url_for('index'))
 
 
+@app.route('/todos/<todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+    try:
+        Todo.query.filter_by(id=todo_id).delete()
+        db.session.commit()
+    except:
+        db.session.rollback()
+    finally:
+        db.session.close()
+    return jsonify({ 'success': True })
+
+
 def make_error(message, code):
     json_error = jsonify({
         'code': code,

@@ -17,6 +17,20 @@
             list-style: none;
             padding: 0px;
             margin: 0px;
+            width: 50%;
+        }
+        li {
+            clear: both;
+        }
+        li button {
+            -webkit-appearance: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: red;
+            float: right;
+            font-size: 20px;
+            background-color: transparent;
         }
     </style>
 </head>
@@ -35,6 +49,7 @@
             <li>
                 <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %}checked{% endif %} />
                 {{ todo.description }}
+                <button class="delete-todo" data-id="{{ todo.id }}">&cross;</button>
             </li>
             {% endfor %}
         </ul>
@@ -59,6 +74,17 @@
                 .catch(function(error) {
                     console.log(error);
                     document.getElementById('error').className = 'error';
+                });
+            }
+        }
+
+        const buttons = document.querySelectorAll('.delete-todo');
+        for (let i = 0; i < buttons.length; i++) {
+            const button = buttons[i];
+            button.onclick = function(e) {
+                const todoId = e.target.dataset['id'];
+                fetch(`/todos/${todoId}`, {
+                    method: 'DELETE'
                 });
             }
         }
