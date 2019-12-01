@@ -267,3 +267,123 @@ To run it:
 $ pip3 install -r requirements.txt
 $ FLASK_APP=app.py FLASK_DEBUG=true flask run
 ```
+
+## db.relationship
+
+[![](https://img.youtube.com/vi/WULi0shD61Q/0.jpg)](https://youtu.be/WULi0shD61Q)
+
+### Takeaways
+* SQLAlchemy configures the settings between model relationships once, and generates JOIN statements for us whenever we need them.
+* `db.relationship` is an interface offered in SQLAlchemy to provide and configure a mapped relationship between two models.
+* `db.relationship` is defined on the parent model, and it sets:
+    * the name of its children (e.g. children), for example parent1.children
+    * the name of a parent on a child using the backref, for example child1.my_amazing_parent
+
+
+### Resources
+* [Flask-SQLAlchemy - Simple Relationships](https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#simple-relationships)
+* [SQLAlchemy Docs: Relationship API](https://docs.sqlalchemy.org/en/latest/orm/relationship_api.html#sqlalchemy.orm.relationship)
+
+<img src="https://video.udacity-data.com/topher/2019/August/5d5f5ed0_screen-shot-2019-08-22-at-8.34.29-pm/screen-shot-2019-08-22-at-8.34.29-pm.png" alt="" width="705px" class="index--image--1wh9w">
+
+## Configuring Relationships
+
+[![](https://img.youtube.com/vi/QATpsBELc8s/0.jpg)](https://youtu.be/QATpsBELc8s)
+
+### Takeaways
+* When calling `child1.some_parent`, SQLAlchemy determines when we load the parent from the database.
+
+#### Why is it important to care about when we load parents?
+* Joins are expensive.
+* We should avoid having the user idling. **Delays more than 150ms are noticeable**, so milliseconds of performance matter!
+* We should make sure the joins happen during a time and place in the UX that doesn't negatively impact the experience too much.
+
+### Lazy loading vs. Eager loading
+
+[![](https://img.youtube.com/vi/oq-Wqp_BSps/0.jpg)](https://youtu.be/oq-Wqp_BSps)
+
+#### Takeaways
+
+**Lazy loading**
+* Load needed joined data only as needed. **Default** in SQLAlchemy.
+    * Pro: no initial wait time. Load only what you need.
+    * Con: produces a join SQL call every time there is a request for a joined asset. Bad if you do this a lot.
+
+**Eager loading**
+* Load all needed joined data objects, all at once.
+    * Pro: reduces further queries to the database. Subsequent SQL calls read existing data
+    * Con: loading the joined table has a long upfront initial load time.
+
+`lazy=True` (lazy loading) is the default option in `db.relationship`:
+
+```python
+children = db.relationship('ChildModel', backref='some_parent', lazy=True)
+```
+
+#### Other loading options we can use
+See [the SQLAlchemy Docs on Relationship Loading Techniques(https://docs.sqlalchemy.org/en/latest/orm/loading_relationships.html)] for more loading options.
+
+### Other relationship options: `collection_class` and `cascade`
+
+[![](https://img.youtube.com/vi/qywsiQi6lvk/0.jpg)](https://youtu.be/qywsiQi6lvk)
+
+#### SQLAlchemy Docs on Relationship Options
+* [SQLALchemy ORM Relationship Docs](https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship)
+
+
+#### Takeaways
+
+**`db.relationship`**
+* Allows SQLAlchemy to identity relationships between models
+* Links relationships with backrefs (`child1.some_parent`)
+* Configures relationship dynamics between parents and children, including options like `lazy`, `collection_class`, and `cascade`
+
+## Foreign Key Constraint Setup
+
+### Setting up the Foreign Key Constraint
+
+[![](https://img.youtube.com/vi/ovI5b7j-Oqc/0.jpg)](https://youtu.be/ovI5b7j-Oqc)
+
+#### Takeaways
+* `db.relationship` does not set up foreign key constraints for you. We need to add a column, `some_parent_id`, on the **child** model that has a foreign key constraint
+* Whereas we set ``db.relationship`` on the **parent** model, we set the foreign key constraint on the child model.
+* A foreign key constraint prefers **referential integrity** from one table to another, by ensuring that the foreign key column always maps a primary key in the foreign table.
+
+<img src="https://video.udacity-data.com/topher/2019/August/5d5f62cd_screen-shot-2019-08-22-at-8.51.27-pm/screen-shot-2019-08-22-at-8.51.27-pm.png" alt="" width="774px" class="index--image--1wh9w">
+
+### `db.ForeignKey` question
+
+[![](https://img.youtube.com/vi/oVuHm3rNxKI/0.jpg)](https://youtu.be/oVuHm3rNxKI)
+
+#### `db.ForeignKey`
+* Option in db.column to specify a foreign key constraint, referring to the primary key of the other table / model
+* Gets defined on the Child model
+
+<img src="https://video.udacity-data.com/topher/2019/August/5d5faa19_screen-shot-2019-08-23-at-1.55.35-am/screen-shot-2019-08-23-at-1.55.35-am.png" alt="" width="716px" class="index--image--1wh9w">
+
+### Resources
+* [SQLAlchemy Docs on Defining Constraints](https://docs.sqlalchemy.org/en/latest/core/constraints.html)
+
+### Applying what we learned to an example
+
+[![](https://img.youtube.com/vi/XXy8hL0d30c/0.jpg)](https://youtu.be/XXy8hL0d30c)
+
+#### Solution
+
+```python
+class Driver(db.Model):
+    __tablename__ = 'drivers'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), nullable=False)
+    state = db.Column(db.String(2), nullable=False)
+    issued = db.Column(db.Date, nullable=False)
+    vehicles = db.relationship('Vehicle', back_ref='driver', lazy=True)
+
+class Vehicle(db.Model):
+    __tablename__ = 'vehicles'
+    id = db.Column(db.Integer, primary_key=True)
+    make = db.Column(db.String(), nullable=False)
+    model = db.Column(db.String(), nullable=False)
+    year = db.Column(db.Integer), nullable=False)
+    driver_id = db.Column(db.Integer, db.ForeignKey('drivers.id'), nullable=False)
+```
