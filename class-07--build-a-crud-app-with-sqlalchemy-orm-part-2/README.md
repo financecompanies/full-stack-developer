@@ -387,3 +387,44 @@ class Vehicle(db.Model):
     year = db.Column(db.Integer), nullable=False)
     driver_id = db.Column(db.Integer, db.ForeignKey('drivers.id'), nullable=False)
 ```
+
+## One-to-Many Relationship Setup
+
+### One-to-Many Relationship Setup
+
+#### Set up a one-to-many relationship between todos and todo lists using SQLAlchemy ORM
+
+Now that we've reviewed how to use `db.relationship` and `db.ForeignKey` to set up relationships between models, let's focus back on our To-Do App and use these concepts to model To-Do Lists in our app and set up the relationship between our To-Do model and our new To-Do List model.
+
+To-Do Lists have many To-Dos, and every To-Do belongs to exactly one To-Do List, which indicates the existence of a **one to many** relationship between To-Dos and To-Do Lists.
+
+(For reference: [read "The 3 Types of Relationships in Database Design" by Database.Guide -- click here](https://database.guide/the-3-types-of-relationships-in-database-design/))
+
+### Creating the TodoList model and adding the foreign key to the child Todo model
+
+[![](https://img.youtube.com/vi/5Bl9RtsEtAY/0.jpg)](https://youtu.be/5Bl9RtsEtAY)
+
+### Create and run a migration to upgrade the schema
+
+[![](https://img.youtube.com/vi/Tord65BkCkw/0.jpg)](https://youtu.be/Tord65BkCkw)
+
+### Overall steps taken
+* Modified our Todo model to (temporarily) allow null values in `list_id`:
+```python
+list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'), nullable=True)
+```
+* Ran the migration, allowing `list_id` to be null
+
+Then using psql (or any other Postgres client),
+* Populated our database with a default list ("Uncategorized") to add all currently existing Todo items to
+* Associated existing to-do items with the "Uncategorized" list with ID 1, setting todo.list_id = 1. We could have also done this in a migration rather than using psql; either works.
+* Set `nullable=False` on the `list_id` column
+* `Ran flask db migrate` to generate a migration file for updating the nullability constraint
+* Ran `flask db upgrade` to apply the migration
+
+### Aside
+SQL commands can be written in any case (update, UPDATE, uPDaTe) and they will still execute.
+
+### Important
+* We always want to use **migrations** in order to update the data schema.
+* We can establish maintenance windows during times when the app isn't well used and manipulate production data then, in order to prepare the data before a schema migration, and change it after a schema migration.
