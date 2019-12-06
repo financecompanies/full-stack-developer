@@ -32,27 +32,45 @@
             font-size: 20px;
             background-color: transparent;
         }
+
+        .lists-wrapper, .todos-wrapper {
+            display: inline-block;
+            vertical-align: top;
+        }
     </style>
 </head>
 
 <body>
     <main>
-        <form id="form">
-            <label for="description">Description</label>
-            <input type="text" id="description" name="description" maxlength="300">
-            <input type="submit" value="Create">
-        </form>
-        <div id="validation" class="hidden error"></div>
-        <div id="error" class="hidden error">Something went wrong!</div>
-        <ul id="todos">
-            {% for todo in data %}
-            <li>
-                <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %}checked{% endif %} />
-                {{ todo.description }}
-                <button class="delete-todo" data-id="{{ todo.id }}">&cross;</button>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="lists-wrapper">
+            <ul id="lists">
+                {% for list in lists %}
+                <li>
+                    <a href="/todos/{{ list.id }}">{{ list.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="todos-wrapper">
+            <h4>{{ active_list.name }}</h4>
+            <form id="form">
+                <label for="description">Description</label>
+                <input type="hidden" id="listId" data-list-id="{{ active_list.id }}"/>
+                <input type="text" id="description" name="description" maxlength="300">
+                <input type="submit" value="Create">
+            </form>
+            <div id="validation" class="hidden error"></div>
+            <div id="error" class="hidden error">Something went wrong!</div>
+            <ul id="todos">
+                {% for todo in active_list.todos %}
+                <li>
+                    <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %}checked{% endif %} />
+                    {{ todo.description }}
+                    <button class="delete-todo" data-id="{{ todo.id }}">&cross;</button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </main>
     <script>
         const checkboxes = document.querySelectorAll('.check-completed');
@@ -60,7 +78,7 @@
             const checkbox = checkboxes[i];
             checkbox.onchange = function(e) {
                 const completed = e.target.checked;
-                const todoId = e.target.dataset['id'];
+                const todoId = e.target.dataset.id;
                 fetch(`/todos/${todoId}/set-completed`, {
                     method: 'POST',
                     body: JSON.stringify({
@@ -91,7 +109,9 @@
 
         document.getElementById('form').onsubmit = function (e) {
             e.preventDefault();
-            fetch('/todos/create', {
+            const input = document.getElementById('listId');
+            const listId = input.dataset.listId;
+            fetch(`/todos/${listId}`, {
                 method: 'POST',
                 body: JSON.stringify({
                     'description': document.getElementById('description').value

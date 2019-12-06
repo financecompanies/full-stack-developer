@@ -30,19 +30,25 @@ class TodoList(db.Model):
 
 
 @app.route('/')
-@app.route('/todos')
 def index():
-    return render_template('index.html', data=Todo.query.order_by('id').all())
+    return redirect(url_for('get_list_todos', list_id=1))
 
 
-@app.route('/todos/create', methods=['POST'])
-def create():
+@app.route('/todos/<list_id>')
+def get_list_todos(list_id):
+    return render_template('index.html',
+    lists=TodoList.query.all(),
+    active_list=TodoList.query.get(list_id))
+
+
+@app.route('/todos/<list_id>', methods=['POST'])
+def create_todo(list_id):
     description = request.get_json().get('description')
     if description:
         error = False
         response = {}
         try:
-            new_todo = Todo(description=description)
+            new_todo = Todo(description=description, list_id=list_id)
             db.session.add(new_todo)
             db.session.commit()
             response['description'] = new_todo.description
