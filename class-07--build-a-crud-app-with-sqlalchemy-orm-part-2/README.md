@@ -428,3 +428,124 @@ SQL commands can be written in any case (update, UPDATE, uPDaTe) and they will s
 ### Important
 * We always want to use **migrations** in order to update the data schema.
 * We can establish maintenance windows during times when the app isn't well used and manipulate production data then, in order to prepare the data before a schema migration, and change it after a schema migration.
+
+## Practice - Modeling Relationships
+
+### Practice modeling relationships
+
+#### Setup
+In the terminal tab to your right, run the following commands:
+
+```bash
+pip install flask_sqlalchemy
+```
+
+#### Exercise
+Set up a one to many relationship between a Todo and a TodoList. Assume that the rest of the Flask app is set up, and `db = SQLAlchemy(app)` is set up for you.
+
+#### My solution
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+
+class Todo(db.Model):
+    __tablename__ = 'todos'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(), nullable=False)
+    completed = db.Column(db.Boolean, nullable=False, default=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'), nullable=False)
+
+    def __repr__(self):
+        return f'Todo (id={self.id}, description={self.description}, list={self.list_id})'
+
+class TodoList(db.Model):
+    __tablename__ = 'todolists'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(), nullable=False)
+    todos = db.relationship('Todo', backref='list', lazy=True, cascade='all, delete-orphan')
+
+    def __repr__(self):
+        return f'TodoList (id={self.id}, name={self.name})'
+```
+
+### Solution Code
+The To-Do app after setting up a one-to-many relationship between Todo and TodoList, and upgrade the data schema post-migrations:
+
+[Download here: todoapp-crud-lists.zip](https://video.udacity-data.com/topher/2019/August/5d5fcc59_todoapp-crud-lists/todoapp-crud-lists.zip)
+
+## Many-To-Many Relationships: Part I
+
+### Types of relationships
+
+[![](https://img.youtube.com/vi/AV-gcQWfhQg/0.jpg)](https://youtu.be/AV-gcQWfhQg)
+
+### Keys in relationships; association tables
+[![](https://img.youtube.com/vi/NKDlpXE7F0k/0.jpg)](https://youtu.be/NKDlpXE7F0k)
+
+### Takeaways
+* In one-to-many and one-to-one, the foreign key is established on the child model.
+* In many-to-many, a special association table exists to join the two tables together, storing two foreign keys that link to the two foreign tables that have a relationship with each other.
+
+## Many-To-Many Relationships: Part II
+
+### Modeling a many-to-many relationship in SQLAlchemy ORM - Part 2
+
+[![](https://img.youtube.com/vi/Xo_fRKPj2fM/0.jpg)](https://youtu.be/Xo_fRKPj2fM)
+
+
+### Takeaways
+To set up a many-to-many in SQLALchemy, we:
+* Define an association table using Table from SQLAlchemy
+* Set the multiple foreign keys in the association table
+* Map the association table to a parent model using the option secondary in db.relationship
+
+### Example with Order, Product, and Order Item
+
+```python
+order_items = db.Table('order_items',
+    db.Column('order_id', db.Integer, db.ForeignKey('order.id'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
+)
+
+class Order(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  status = db.Column(db.String(), nullable=False)
+  products = db.relationship('Product', secondary=order_items,
+      backref=db.backref('orders', lazy=True))
+
+class Product(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(), nullable=False)
+```
+
+### Looking at it in the code
+
+[![](https://img.youtube.com/vi/17FW9tAaDvA/0.jpg)](https://youtu.be/17FW9tAaDvA)
+
+### Follow along in the interactive workspace (below)
+
+**Example app.py**
+
+```python
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://udacitystudios@localhost:5432/example'
+db = SQLAlchemy(app)
+
+order_items = db.Table('order_items',
+    db.Column('order_id', db.Integer, db.ForeignKey('order.id'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
+)
+
+class Order(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  status = db.Column(db.String(), nullable=False)
+  products = db.relationship('Product', secondary=order_items,
+      backref=db.backref('orders', lazy=True))
+
+class Product(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(), nullable=False)
+```
