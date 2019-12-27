@@ -174,3 +174,48 @@ flask run
 
 [![](https://img.youtube.com/vi/NAtUcUuduVs/0.jpg)](https://youtu.be/NAtUcUuduVs)
 
+## Introduction to Curl and Chrome Dev Tools
+
+### Chrome Dev Tools
+
+[![](https://img.youtube.com/vi/5MHAJcYQHZo/0.jpg)](https://youtu.be/5MHAJcYQHZo)
+
+### Curl
+
+[![](https://img.youtube.com/vi/jWEFlKA0ib4/0.jpg)](https://youtu.be/jWEFlKA0ib4)
+
+#### Curl Syntax
+
+```bash
+curl -X POST http://www.example.com/tasks/
+```
+
+The above is a sample curl request. Every request starts off with the command `curl` and needs to include a URL. Other parts you see added in are options that you can use to build your request. In the example the `-X` shortform option (also `--request`) specifies the request method.
+
+[![](https://img.youtube.com/vi/VfdQXImHJlU/0.jpg)](https://youtu.be/VfdQXImHJlU)
+
+#### Curl Options
+
+You can find more options by entering `curl --help` in the terminal. Some frequently used options are:
+
+* `-X` or `--request` COMMAND
+* `-d` or `--data` DATA
+* `-F` or `--form` CONTENT
+* `-u` or `--user` USER[:PASSWORD]
+* `-H` or `--header` LINE
+
+#### Extra
+
+Pretty printing
+
+```
+curl -s -D "/dev/stderr" https://pokeapi.co/api/v2/move/47 | jq
+```
+
+Or simply add to `~/.curlrc` file
+
+```bash
+ -w "\n"
+ silent
+ -D /dev/stderr
+ ```
