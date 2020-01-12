@@ -63,14 +63,20 @@ def create_app(test_config=None):
     if book_found is None:
         return abort(404)
 
-    book_rating = request.get_json().get('rating', 1)
-    book_found.rating = book_rating
-    book_found.update()
+    try:
+        if not 'rating' in request.get_json():
+            abort(make_response(jsonify(message='You have to specify rating value in the range 1 to 5')))
 
-    return jsonify({
-      'success': True,
-      'updated': book_found.id
-    })
+        book_rating = request.get_json().get('rating', 1)
+        book_found.rating = book_rating
+        book_found.update()
+
+        return jsonify({
+          'success': True,
+          'updated': book_found.id
+        })
+    except:
+        abort(400)
 
   # @TODO: Write a route that will delete a single book.
   #        Response body keys: 'success', 'deleted'(id of deleted book), 'books' and 'total_books'
@@ -107,24 +113,23 @@ def create_app(test_config=None):
     author = book_json.get('author', None)
     rating = book_json.get('rating', 1)
 
-    if title is None or author is None:
-        print('title or author is missing')
-        return abort(make_response(jsonify(messages="Title and author fields are required"), 400))
+    if not title or not author:
+        return abort(make_response(jsonify(message='Title and author fields are required'), 400))
 
-    new_book = Book(title=title, author=author, rating=rating)
-    new_book.insert()
-    print('insert is ok')
+    try:
+        new_book = Book(title=title, author=author, rating=rating)
+        new_book.insert()
 
-    selection = Book.query.all()
-    formatted_books = [book.format() for book in selection]
+        selection = Book.query.all()
+        formatted_books = [book.format() for book in selection]
 
-    print('now returning the payload')
-    return jsonify({
-      'success': True,
-      'created': new_book.id,
-      'books': formatted_books,
-      'total_books': len(formatted_books)
-    })
+        return jsonify({
+          'success': True,
+          'created': new_book.id,
+          'books': formatted_books,
+          'total_books': len(formatted_books)
+        })
+    except:
+        abort(422)
 
   return app
-
