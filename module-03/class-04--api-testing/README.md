@@ -29,9 +29,7 @@ Step 2 is essential to ensuring the application is production-ready and time-to-
 
 ## 2. Testing in Flask
 
-<figure class="video_container">
-<iframe src="https://r848940c899836xJUPYTERiht9hei9.udacity-student-workspaces.com/notebooks/Testing_Prep.ipynb" allow="microphone" frameborder="0" style="height:100%; width:100%;"></iframe>
-</figure>
+### Learn interactively about `unittest` structure using Jupyter Notebooks [Testing Prep](https://r848940c899836xjupyteriht9hei9.udacity-student-workspaces.com/notebooks/Testing_Prep.ipynb)
 
 [![](https://img.youtube.com/vi/EiwiF5Mqz0E/0.jpg)](https://youtu.be/EiwiF5Mqz0E)
 
