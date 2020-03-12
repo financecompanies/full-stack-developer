@@ -106,7 +106,6 @@ def create_app(test_config=None):
 
             selection = Book.query.order_by(Book.id).all()
             current_books = paginate_books(request, selection)
-            import pdb; pdb.set_trace()
 
             return jsonify({
                 'success': True,
@@ -141,6 +140,14 @@ def create_app(test_config=None):
             "error": 400,
             "message": "bad request"
         }), 400
+
+    @app.errorhandler(405)
+    def method_not_allowed(e):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "method not allowed"
+        }), 405
   
     return app
 
