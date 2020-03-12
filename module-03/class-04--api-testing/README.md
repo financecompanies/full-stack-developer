@@ -1,6 +1,6 @@
 # API Testing
 
-## Overview
+## 1. Overview
 
 [![](https://img.youtube.com/vi/Q_Jh4bsLUJ8/0.jpg)](https://youtu.be/Q_Jh4bsLUJ8)
 
@@ -26,3 +26,48 @@ The order of operations for app development should always be:
 * Production
 
 Step 2 is essential to ensuring the application is production-ready and time-to-production is used efficiently
+
+## 2. Testing in Flask
+
+<figure class="video_container">
+<iframe src="https://r848940c899836xJUPYTERiht9hei9.udacity-student-workspaces.com/notebooks/Testing_Prep.ipynb" allow="microphone" frameborder="0" style="height:100%; width:100%;"></iframe>
+</figure>
+
+[![](https://img.youtube.com/vi/EiwiF5Mqz0E/0.jpg)](https://youtu.be/EiwiF5Mqz0E)
+
+### Unittest Flask Key Structures
+
+As we just saw, all of your Flask application tests will follow the same format:
+1. **Define the test case class** for the application (or section of the application, for larger applications).
+2. **Define and implement the `setUp` function**. It will be executed before each test and is where you should initialize the app and test client, as well as any other context your tests will need. The Flask library provides a test client for the application, accessed as shown below.
+3. **Define the `tearDown` method**, which is implemented after each test. It will run as long as setUp executes successfully, regardless of test success.
+4. **Define your tests**. All should begin with `"test_"` and include a doc string about the purpose of the test. In defining the tests, you will need to:
+    1. Get the response by having the client make a request
+    2. Use `self.assertEqual` to check the status code and all other relevant operations.
+5. **Run the test suite**, by running `python test_file_name.py` from the command line.
+
+Here's that same code (from the notebook above), for your reference:
+
+```python
+class AppNameTestCase(unittest.TestCase):
+    """This class represents the ___ test case"""
+
+    def setUp(self):
+        """Executed before each test. Define test variables and initialize app."""
+        self.client = app.test_client
+        pass
+
+    def tearDown(self):
+        """Executed after reach test"""
+        pass
+
+    def test_given_behavior(self):
+        """Test _____________ """
+        res = self.client().get('/')
+
+        self.assertEqual(res.status_code, 200)
+
+# Make the tests conveniently executable
+if __name__ == "__main__":
+unittest.main()
+```
