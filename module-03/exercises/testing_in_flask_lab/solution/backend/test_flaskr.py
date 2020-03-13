@@ -109,7 +109,7 @@ class BookTestCase(unittest.TestCase):
 
     def test_create_book(self):
         response = self.client().post('/books', json=self.new_book)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
         self.assertTrue(data['success'])
         self.assertTrue(data['created'])
