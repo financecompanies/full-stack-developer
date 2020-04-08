@@ -152,6 +152,25 @@ Additional Resources:
 
 [Jupyter Notebook](https://r848940c858541xJUPYTERqdhs1cm1.udacity-student-workspaces.com/notebooks/JWT.ipynb)
 
+Code
+```python
+import jwt
+import base64
+
+payload = {"user": "john", "name": "John Doe"}
+algo = "HS256"
+secret = "secrecy"
+
+encoded_jwt = jwt.encode(payload, secret, algorithm=algo)
+print(encoded_jwt)
+
+decoded_jwt = jwt.decode(payload, secret, verify=True)
+print(decoded_jwt)
+
+decoded_base64 = base64.b64decode(str(encoded_jwt).split(".")[1]+"==")
+print(decoded_base64)
+```
+
 ## [XX. ]()
 
 ### SECTION
