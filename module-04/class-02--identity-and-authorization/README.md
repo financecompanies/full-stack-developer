@@ -97,6 +97,61 @@ In contrast, some issues are within **our control** as developers:
 - [Firebase Auth](https://firebase.google.com/docs/auth)
 - [Okta](https://www.okta.com/)
 
+## [5. Implementing Auth0](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/4bdfc24c-e822-42fe-994f-052de526036b)
+
+### Working with Auth0
+Follow along with the set up at [Auth0.com](auth0.com)!
+
+[![](https://img.youtube.com/vi/Mikr9g_JBaE/0.jpg)](https://youtu.be/Mikr9g_JBaE)
+
+### Using the Auth0 Authorization Code Flow with Hosted Login Pages
+
+[![](https://img.youtube.com/vi/_Fb0HKn0U2I/0.jpg)](https://youtu.be/_Fb0HKn0U2I)
+
+### Auth0 Authorize Link
+
+1. Access [documentation](https://auth0.com/docs/api/authentication?http#authorization-code-flow) and get the authorize URL
+2. Replace with your own settings
+3. Copy and paste to your browse and then navegate to it
+4. Access https://jwt.io/#encoded-jwt to decode the JWT
+
+Final Authorization Code Flow URL
+
+```curl
+https://fsnd-auth2.auth0.com/authorize?audience=image&response_type=token&client_id=wf608uGgNIHRGCSHqivJp3QKOYsJoPYN&redirect_uri=http://localhost:8080/login-results&state=STATE
+```
+
+## [6. JWT - JSON Web Tokens](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/846d6ed1-148b-41c2-b0fc-364cb1fb938a)
+
+[![](https://img.youtube.com/vi/6TWWT1W_4D4/0.jpg)](https://youtu.be/6TWWT1W_4D4)
+
+## [7. JWT - Datastructure](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/e9a02c51-50d9-4b84-9aeb-3cac33d30b6e)
+
+### Including Data in Our JWT Payload
+
+[![](https://img.youtube.com/vi/rz7saqU8d8Q/0.jpg)](https://youtu.be/rz7saqU8d8Q)
+
+### Parts of a JSON Web Token
+
+[![](https://img.youtube.com/vi/WRYsLYuvgoc/0.jpg)](https://youtu.be/WRYsLYuvgoc)
+
+## [8. JWT - Validation](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/d2353499-1bd9-4e3d-bc11-0156561d30cb)
+
+### Validating JWT Authenticity
+
+[![](https://img.youtube.com/vi/SoT_ETc35vs/0.jpg)](https://youtu.be/SoT_ETc35vs)
+
+Additional Resources:
+- [JWT.io](https://jwt.io/introduction/) a useful guide and list of popular JSON Web Token implementations.
+- [Base64 Encoding](https://en.wikipedia.org/wiki/Base64)
+- [HMAC](https://en.wikipedia.org/wiki/HMAC) keyed-hash message authentication code
+
+## [9. Practice - Generating and Verifying JWTs](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/a0f32909-f902-44e7-bd30-ab011e14ed6b)
+
+### Practice - Generating and Verifying JWTs
+
+[Jupyter Notebook](https://r848940c858541xJUPYTERqdhs1cm1.udacity-student-workspaces.com/notebooks/JWT.ipynb)
+
 ## [XX. ]()
 
 ### SECTION
@@ -108,16 +163,3 @@ In contrast, some issues are within **our control** as developers:
 ### SECTION
 
 [![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
-
-## [XX. ]()
-
-### SECTION
-
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
-
-## [XX. ]()
-
-### SECTION
-
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
-
