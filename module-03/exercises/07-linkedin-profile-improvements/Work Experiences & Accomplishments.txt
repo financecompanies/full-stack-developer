@@ -1,0 +1,45 @@
+Work Experiences & Accomplishments
+
+Review Experiences
+- Include only relevant experience.
+- Make sure that your most relevant and most recent experience appears at the top of your profile.
+- Always convey Action, Numbers, Success
+    Action - Use active verbs to describe what you did.
+    Numbers - Quantify your accomplishments.
+    Success - Define each experience in terms of what you learned or achieved.
+- Keep each description to 3 bullet points or less.
+- At least 1 of these bullet points should demonstrate an individual contribution.
+- At least 1 of these bullet points should communicate a project result (success metrics, findings).
+
+Accomplishments
+
+- Add projects
+    - Include the specific technical skills you learned relevant to your target field
+
+    pessoal
+    - Horários Rmtc Goiânia
+    - Versículo do Dia
+    - Semana Lixo Zero Goiânia
+    - BuscaSUS Goiânia
+
+    nanodegree
+    - Fyyur: Artist Booking Site
+    - Trivia API
+
+    profissional
+    - Zilfarma
+    - Peticiona Mais
+    - Mobile Territorio
+    - Ponto Domestico
+    - mot?
+    - CRS
+    - Eleições Aqui
+    - Minidicionário de Biologia
+    - JSyncProtocol
+    - YappVendas
+    - MyFast
+- Add udacity courses
+- Add alura courses
+- Examples
+    - https://www.linkedin.com/in/kristindragos/
+    - https://www.linkedin.com/in/michael-virgo/
