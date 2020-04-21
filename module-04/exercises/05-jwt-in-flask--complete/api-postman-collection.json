@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "83ae9773-8e88-4130-a6a6-5c25efb0be04",
+		"name": "FSND > Identity and Access Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Validate valid JWT token",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"connection": true,
+					"accept-encoding": true,
+					"accept": true,
+					"user-agent": true,
+					"host": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Inl0cUpfdjdjbnN4V0Z3YUIybVd1aSJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtYXV0aDIuYXV0aDAuY29tLyIsInN1YiI6ImZhY2Vib29rfDI4NzgwNDkwMTg5NDg1NDAiLCJhdWQiOlsiaW1hZ2UiLCJodHRwczovL2ZzbmQtYXV0aDIuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU4NzQ4ODUzMSwiZXhwIjoxNTg3NDk1NzMxLCJhenAiOiJ3ZjYwOHVHZ05JSFJHQ1NIcWl2SnAzUUtPWXNKb1BZTiIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwifQ.GiWG9vR9V076-fXRem-hqVUEEu0GD71dv4uVMHPmbG2SUCh1gLqt90nPwIBqQEKIgNnxmuXm_meQhTKzBF0GB3aLOYU8TRWNvf6DtH59aztl05PIuYfo0HctbP4rFq227lBggFxLw8EEh2cnOf8WeAxBgcU2PgBalaUnLNeT04lw6dNmjXIXUHJbdqsj8q4je002RdCgIquhml1mquuSA8Z2-7HDNPUHrqtAA9_fI-lSrAF5BbNK4Mk43brUxx0ryKYTW-eU8aUrA08o3dkxP3eAfHAytdNKS_GmCmSJhXk3ycwfisiXMu8Vkp8BzBag2uWj83tgKfs2mm2-DCN4wQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer jwt",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/headers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"headers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate invalid JWT token",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true,
+					"host": true,
+					"user-agent": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "secretbutinvalidjwt",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer jwt",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/headers",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"headers"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bacd1dc3-0c81-4eee-a85a-0075b0a6bee4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "fe50d326-00e7-4662-b3ca-13e2d672d29d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
