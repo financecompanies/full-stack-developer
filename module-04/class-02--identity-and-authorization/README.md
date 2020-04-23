@@ -348,17 +348,55 @@ We also mentioned [NPM or Node Package Manager](https://www.npmjs.com/) this is 
 - [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) Authorization Header Documentation.
 - [Postman Authorization](https://learning.getpostman.com/docs/postman/sending_api_requests/authorization/) Including authorization headers in postman requests.
 
-## [XX. ]()
+## [14. Practice - Sending Tokens](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/2534fdc2-5d89-45b1-9b55-b0bcb91d647a)
 
-### SECTION
+### Practice - Sending Tokens
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+[Jupyter Notebook](https://r848940c857089xJUPYTERL23i7llbn.udacity-student-workspaces.com/)
 
-## [XX. ]()
+Result code
+```python
+from functools import wraps
 
-### SECTION
+from flask import Flask, request, abort
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+
+app = Flask(__name__)
+
+def get_auth_header():
+    if 'Authorization' not in request.headers:
+        abort(401)
+
+    auth_parts = request.headers['Authorization'].split(' ')
+
+    if len(auth_parts) != 2:
+        abort(401)
+
+    auth_bearer, auth_jwt = auth_parts
+    if auth_bearer.lower() != 'bearer':
+        abort(401)
+
+    return auth_jwt
+
+def requires_auth(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        jwt = get_auth_header()
+        return f(jwt, *args, **kwargs)
+    return wrapper
+
+@app.route('/headers')
+@requires_auth
+def headers(jwt):
+    print(jwt)
+    return 'not implemented'
+```
+
+## [15. Practice - Applying Skills in Flask](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/0f6a882a-aff8-474a-b0ec-15a28f8c0c95/concepts/f5c8c8a6-b9f4-4df9-a034-353d2049c5ac)
+
+### Practice - Applying Skills in Flask
+
+[![](https://img.youtube.com/vi/30gU4qDPU9A/0.jpg)](https://youtu.be/30gU4qDPU9A)
 
 ## [XX. ]()
 
