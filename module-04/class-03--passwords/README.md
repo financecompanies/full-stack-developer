@@ -66,7 +66,7 @@
 
 ![](./images/concept-4.question-2.png)
 
-### Final code
+### My Solution
 
 > "I accepted the **bonus** challenge and I implemented the code to prevent multiple failed login attempts."
 
@@ -107,6 +107,11 @@ def headers():
         failed_login_attempts += 1
         abort(401)
 ```
+
+#### Additional readings
+
+- https://www.geeksforgeeks.org/global-keyword-in-python/
+- https://www.geeksforgeeks.org/global-local-variables-python/
 
 ## [05. Problems - Data Handling and Logging](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/450352d6-5e7e-47e7-aa41-eae3dc4f3cea/concepts/c1eb762a-73dc-471e-87d0-b0b33c1215e6)
 
@@ -253,6 +258,13 @@ for user in leaked_users_table:
         print(f'Found user {user}: \t {md5} \t {found}')
 ```
 
+##### Additional readings
+
+- https://docs.python.org/3/library/hashlib.html
+- https://www.geeksforgeeks.org/python-convert-a-list-to-dictionary/
+- https://realpython.com/iterate-through-dictionary-python/
+- https://docs.python.org/3/library/stdtypes.html#dict
+
 #### Their solution
 
 ```python
@@ -274,26 +286,94 @@ for user in leaked_users_table.keys():
 
 ![](./images/concept-11.question-1.png)
 
-## [XX. ]()
+## [12. Hashing with Salts](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/450352d6-5e7e-47e7-aa41-eae3dc4f3cea/concepts/1c0b6535-137d-4e24-884e-a3591944fdfa)
 
-### SECTION
+### What are Salted Hashes?
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+[![](https://img.youtube.com/vi/UOBe3JXQbwo/0.jpg)](https://youtu.be/UOBe3JXQbwo)
 
-## [XX. ]()
+### Questions
 
-### SECTION
+![](./images/concept-12.question-1.png)
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+## [13. Practice - Salted, Hashed Passwords](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/450352d6-5e7e-47e7-aa41-eae3dc4f3cea/concepts/5b9c6032-b6e5-4030-aa20-188fd35caf52)
 
-## [XX. ]()
+### Practice - Using the BCrypt Python Package with Salts
 
-### SECTION
+If you get stuck, refer to the [BCrypt documentation](https://github.com/pyca/bcrypt/).
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+[Jupyter Notebook](https://r848940c858541xJUPYTERqdhs1cm1.udacity-student-workspaces.com/notebooks/Salted_Hashed_Passwords.ipynb)
 
-## [XX. ]()
+#### My Solution
 
-### SECTION
+[app.py](../exercises/08-salted-hashed-passwords/app.py)
 
-[![](https://img.youtube.com/vi/VIDEO/0.jpg)](https://youtu.be/VIDEO)
+```python
+@app.route('/login', methods=['POST'])
+def login():
+    body = request.get_json()
+    if body:
+        username = body.get('username')
+        password = body.get('password')
+
+        if all([username, password]):
+            try:
+                user = find_user(username)
+                check_pw(password, user['password'])
+                return {'succes': True}, 201
+            except:
+                abort(401)
+        else:
+            abort(400)
+    else:
+        abort(400)
+```
+
+[auth.py](../exercises/08-salted-hashed-passwords/auth.py)
+
+```python
+class AuthError(Exception):
+    def __init__(self, error, status_code):
+        self.error = error
+        self.status_code = status_code
+
+
+def check_pw(password, hashed):
+    if not bcrypt.checkpw(password.encode(), hashed):
+        raise AuthError(
+            {
+                'code': 'wrong_credentials',
+                'description': 'Wrong credentials.'
+            },
+            401
+        )
+```
+
+#### Additional redings
+
+- https://github.com/pyca/bcrypt/
+- https://mkyong.com/python/python-3-convert-string-to-bytes/
+- https://docs.python.org/3/library/pprint.html
+- https://www.json-generator.com/
+
+## [14. Recap](https://classroom.udacity.com/nanodegrees/nd0044/parts/b91edf5c-5a4d-499a-ba69-a598afd9fe3e/modules/5606de9d-aa2b-4a1b-9b14-81b87d80a264/lessons/450352d6-5e7e-47e7-aa41-eae3dc4f3cea/concepts/7242a924-e2ce-4cd9-b924-7b735c3743a4)
+
+### Passwords are Ubiquitous and the ABSOLUTE worst.
+
+[![](https://img.youtube.com/vi/3H0ccRHxPqA/0.jpg)](https://youtu.be/3H0ccRHxPqA)
+
+### Questions
+
+![](./images/concept-14.question-1.png)
+
+### Additional Resources:
+
+#### Security and Password Policies
+
+- [NPM Security Policy](https://www.npmjs.com/policies/security)
+- [Good blog post on password policies](https://blog.devolutions.net/2018/02/top-10-password-policies-and-best-practices-for-system-administrators)
+
+#### Password Managers
+
+- [LastPass](https://www.lastpass.com/)
+- [Chrome Password Manager](https://support.google.com/chrome/answer/95606?co=GENIE.Platform%3DDesktop&hl=en) (better than a postit)
